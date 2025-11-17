@@ -1,0 +1,24 @@
+version: '3.8'
+
+services:
+  jenkins:
+    image: jenkins/jenkins:2.387.3-lts-jdk11
+    container_name: attendance_jenkins
+    ports:
+      - "8080:8080"
+      - "50000:50000"
+    environment:
+      - JENKINS_OPTS=--argumentsRealm.passwd.admin=admin123 --argumentsRealm.roles.admin=admin
+    volumes:
+      - jenkins_data:/var/jenkins_home
+      - /var/run/docker.sock:/var/run/docker.sock
+      - $(which docker):/usr/bin/docker
+    networks:
+      - attendance_network
+
+networks:
+  attendance_network:
+    driver: bridge
+
+volumes:
+  jenkins_data:
